@@ -43,13 +43,24 @@ public class Application {
             		.uri(uriConfiguration.getSpotifyAuth())
             		)
             
-            .route(p -> p .path("/musixm/auth")
+            .route(p -> p .path("/musixmatch/lyrics")
             		.filters(f -> f
             				.hystrix(config -> config
             						.setFallbackUri(uriConfiguration.getFallbackUri())
             						)
             				)
             		.uri(uriConfiguration.getMusixmAuth())
+            		)
+            
+            .route(p -> p .path("/musixmatch/lyrics/**")
+            		.filters(f -> f
+            				.hystrix(config -> config
+            						.setFallbackUri(uriConfiguration.getFallbackUri()
+            								)            						
+            						)
+            				.rewritePath("/lyrics/(?<id>.*)", "/lyrics/${id}")
+            				)
+            		.uri("")
             		)
             
             .build();
